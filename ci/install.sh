@@ -12,13 +12,13 @@ install_deps() {
 
 install_qemu() {
     case $TARGET in
-        mipsel-unknown-linux-gnu | \
+        mipsel-unknown-linux-* | \
         powerpc64le-unknown-linux-gnu)
             apt-get install -y --no-install-recommends \
                     qemu-user
             ;;
         mips-unknown-linux-gnu | \
-            powerpc64-unknown-linux-gnu)
+        powerpc64-unknown-linux-gnu)
             dpkg --add-architecture i386
             apt-get update
             apt-get install -y --no-install-recommends \
@@ -28,6 +28,9 @@ install_qemu() {
 }
 
 install_c_toolchain() {
+    local openwrt_url=https://downloads.openwrt.org/snapshots/trunk
+    local mipsel_tarball=malta/generic/OpenWrt-Toolchain-malta-le_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
+
     case $TARGET in
         aarch64-unknown-linux-gnu)
             sudo apt-get install -y --no-install-recommends \
@@ -45,6 +48,10 @@ install_c_toolchain() {
         mipsel-unknown-linux-gnu)
             apt-get install -y --no-install-recommends \
                     gcc-mipsel-linux-gnu libc6-dev-mipsel-cross
+            ;;
+        mipsel-unknown-linux-musl)
+            curl -sL $openwrt_url/$mipsel_tarball | \
+                tar --strip-components=2 --wildcards -C /usr/local -xj 'OpenWrt*/toolchain*'
             ;;
         powerpc64-unknown-linux-gnu)
             apt-get install -y --no-install-recommends \

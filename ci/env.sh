@@ -44,6 +44,14 @@ case $TARGET in
         export QEMU=qemu-mipsel
         export QEMU_LD_PREFIX=/usr/mipsel-linux-gnu
         ;;
+    mipsel-unknown-linux-musl)
+        if [[ -z $DOCKER ]]; then
+            export DOCKER=y
+        fi
+        export PREFIX=mipsel-openwrt-gnu-
+        export QEMU=qemu-mipsel
+        export QEMU_LD_PREFIX=/usr/local/mipsel-openwrt-linux
+        ;;
     powerpc-unknown-linux-gnu)
         export PREFIX=powerpc-linux-gnu-
         export QEMU_LD_PREFIX=/usr/powerpc-linux-gnu
