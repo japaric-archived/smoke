@@ -62,6 +62,10 @@ matrix:
       os: linux
       services: docker
       sudo: required
+    - env: TARGET=mipsel-unknown-linux-musl
+      os: linux
+      services: docker
+      sudo: required
     - env: TARGET=powerpc-unknown-linux-gnu
       os: linux
       dist: trusty
