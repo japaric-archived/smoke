@@ -5,15 +5,15 @@ case $TARGET in
         export PREFIX=aarch64-linux-gnu-
         export QEMU_LD_PREFIX=/usr/aarch64-linux-gnu
         ;;
-    arm*-unknown-linux-gnueabi)
+    arm*-unknown-linux-*eabi)
         export PREFIX=arm-linux-gnueabi-
         export QEMU_LD_PREFIX=/usr/arm-linux-gnueabi
         ;;
-    arm-unknown-linux-gnueabihf)
+    arm-unknown-linux-*eabihf)
         export PREFIX=arm-linux-gnueabihf-
         export QEMU_LD_PREFIX=/usr/arm-linux-gnueabihf
         ;;
-    armv7-unknown-linux-gnueabihf)
+    armv7-unknown-linux-*eabihf)
         export PREFIX=arm-linux-gnueabihf-
         export QEMU_LD_PREFIX=/usr/arm-linux-gnueabihf
         ;;

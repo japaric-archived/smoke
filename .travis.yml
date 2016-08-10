@@ -21,12 +21,18 @@ matrix:
       sudo: required
       addons:
         apt:
-          packages:
+          packages: &arm
             - binfmt-support
             - gcc-arm-linux-gnueabi
             - libc6-armel-cross
             - libc6-dev-armel-cross
             - qemu-user-static
+    - env: TARGET=arm-unknown-linux-musleabi
+      os: linux
+      sudo: required
+      addons:
+        apt:
+          packages: *arm
     - env: TARGET=arm-unknown-linux-gnueabihf
       os: linux
       sudo: required
@@ -38,7 +44,19 @@ matrix:
             - libc6-armhf-cross
             - libc6-dev-armhf-cross
             - qemu-user-static
+    - env: TARGET=arm-unknown-linux-musleabihf
+      os: linux
+      sudo: required
+      addons:
+        apt:
+          packages: *armhf
     - env: TARGET=armv7-unknown-linux-gnueabihf
+      os: linux
+      sudo: required
+      addons:
+        apt:
+          packages: *armhf
+    - env: TARGET=armv7-unknown-linux-musleabihf
       os: linux
       sudo: required
       addons:
