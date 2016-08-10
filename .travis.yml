@@ -3,6 +3,10 @@ sudo: false
 
 matrix:
   include:
+    - env: TARGET=mipsel-unknown-linux-musl
+      os: linux
+      services: docker
+      sudo: required
     - env: TARGET=aarch64-unknown-linux-gnu
       os: linux
       dist: trusty
@@ -59,10 +63,6 @@ matrix:
       services: docker
       sudo: required
     - env: TARGET=mipsel-unknown-linux-gnu
-      os: linux
-      services: docker
-      sudo: required
-    - env: TARGET=mipsel-unknown-linux-musl
       os: linux
       services: docker
       sudo: required

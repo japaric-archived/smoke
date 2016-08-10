@@ -50,6 +50,8 @@ install_c_toolchain() {
                     gcc-mipsel-linux-gnu libc6-dev-mipsel-cross
             ;;
         mipsel-unknown-linux-musl)
+            apt-get install -y --no-install-recommends \
+                    bzip2
             curl -sL $openwrt_url/$mipsel_tarball | \
                 tar --strip-components=2 --wildcards -C /usr/local -xj 'OpenWrt*/toolchain*'
             ;;
