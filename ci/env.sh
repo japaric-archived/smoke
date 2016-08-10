@@ -1,4 +1,5 @@
 export HOST=x86_64-unknown-linux-gnu
+export STAGING_DIR=/openwrt/staging_dir
 
 case $TARGET in
     aarch64-unknown-linux-gnu)
@@ -50,7 +51,9 @@ case $TARGET in
         fi
         export PREFIX=mipsel-openwrt-linux-
         export QEMU=qemu-mipsel
-        export QEMU_LD_PREFIX=/usr/local/mipsel-openwrt-linux
+        if [[ -d $STAGING_DIR ]]; then
+            export QEMU_LD_PREFIX=$(echo $STAGING_DIR/toolchain-*/)
+        fi
         ;;
     powerpc-unknown-linux-gnu)
         export PREFIX=powerpc-linux-gnu-
