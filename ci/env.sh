@@ -23,6 +23,11 @@ case $TARGET in
             export DOCKER=y
         fi
         ;;
+    i686-unknown-linux-musl)
+        if [[ -z $DOCKER ]]; then
+            export DOCKER=y
+        fi
+        ;;
     mips-unknown-linux-gnu)
         if [[ -z $DOCKER ]]; then
             export DOCKER=y

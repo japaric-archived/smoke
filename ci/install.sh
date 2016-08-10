@@ -28,7 +28,8 @@ install_c_toolchain() {
             sudo apt-get install -y --no-install-recommends \
                  gcc-aarch64-linux-gnu libc6-dev-arm64-cross
             ;;
-        i586-unknown-linux-gnu)
+        i586-unknown-linux-gnu | \
+        i686-unknown-linux-musl)
             apt-get install -y --no-install-recommends \
                     gcc libc6-dev-i386 lib32gcc-5-dev
             ;;

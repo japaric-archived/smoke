@@ -3,10 +3,6 @@ sudo: false
 
 matrix:
   include:
-    - env: TARGET=i586-unknown-linux-gnu
-      os: linux
-      services: docker
-      sudo: required
     - env: TARGET=aarch64-unknown-linux-gnu
       os: linux
       dist: trusty
@@ -44,12 +40,14 @@ matrix:
       addons:
         apt:
           packages: *armhf
+    - env: TARGET=i586-unknown-linux-gnu
+      os: linux
+      services: docker
+      sudo: required
     - env: TARGET=i686-unknown-linux-gnu
       os: linux
-      addons:
-        apt:
-          packages:
-            - gcc-multilib
+      services: docker
+      sudo: required
     - env: TARGET=i686-unknown-linux-musl
       os: linux
       addons:
