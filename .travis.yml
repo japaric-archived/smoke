@@ -50,6 +50,12 @@ matrix:
         apt:
           packages:
             - gcc-multilib
+    - env: TARGET=i686-unknown-linux-musl
+      os: linux
+      addons:
+        apt:
+          packages:
+            - gcc-multilib
     - env: TARGET=mips-unknown-linux-gnu
       os: linux
       services: docker
@@ -79,6 +85,8 @@ matrix:
       services: docker
       sudo: required
     - env: TARGET=x86_64-unknown-linux-gnu
+      os: linux
+    - env: TARGET=x86_64-unknown-linux-musl
       os: linux
 
 before_install:
