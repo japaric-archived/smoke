@@ -2,6 +2,12 @@ set -ex
 
 . $(dirname $0)/env.sh
 
+test_qemu() {
+    echo 'int main() { return 0; }' > qemu.c
+    ${PREFIX}gcc qemu.c
+    $QEMU ./a.out
+}
+
 build() {
     cargo build --target $TARGET
     cargo build --target $TARGET --release
@@ -68,6 +74,9 @@ main() {
                       bash ci/install.sh;
                       bash ci/script.sh'
     else
+        if [[ $QEMU ]]; then
+            test_qemu
+        fi
         build
         run_tests
     fi
