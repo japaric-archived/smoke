@@ -48,7 +48,7 @@ case $TARGET in
         if [[ -z $DOCKER ]]; then
             export DOCKER=y
         fi
-        export PREFIX=mipsel-openwrt-gnu-
+        export PREFIX=mipsel-openwrt-linux-
         export QEMU=qemu-mipsel
         export QEMU_LD_PREFIX=/usr/local/mipsel-openwrt-linux
         ;;
