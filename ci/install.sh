@@ -17,7 +17,7 @@ install_qemu() {
             apt-get install -y --no-install-recommends \
                     qemu-user
             ;;
-        mips-unknown-linux-gnu | \
+        mips-unknown-linux-* | \
         powerpc64-unknown-linux-gnu)
             dpkg --add-architecture i386
             apt-get update
@@ -30,6 +30,7 @@ install_qemu() {
 install_c_toolchain() {
     local openwrt_url=https://downloads.openwrt.org/snapshots/trunk
     local mipsel_tarball=malta/generic/OpenWrt-SDK-malta-le_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
+    local mips_tarball=ar71xx/generic/OpenWrt-SDK-ar71xx-generic_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
 
     case $TARGET in
         aarch64-unknown-linux-gnu)
@@ -44,6 +45,14 @@ install_c_toolchain() {
         mips-unknown-linux-gnu)
             apt-get install -y --no-install-recommends \
                     gcc-mips-linux-gnu libc6-dev-mips-cross
+            ;;
+        mips-unknown-linux-musl)
+            apt-get install -y --no-install-recommends \
+                    bzip2
+            mkdir /openwrt
+            curl -sL $openwrt_url/$mips_tarball | \
+                tar --strip-components 1 -C /openwrt -xj
+            ln -s $STAGING_DIR/toolchain-*/bin/${PREFIX}gcc /usr/bin/
             ;;
         mipsel-unknown-linux-gnu)
             apt-get install -y --no-install-recommends \
