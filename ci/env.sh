@@ -37,6 +37,16 @@ case $TARGET in
         export QEMU=qemu-mips
         export QEMU_LD_PREFIX=/usr/mips-linux-gnu
         ;;
+    mips-unknown-linux-musl)
+        if [[ -z $DOCKER ]]; then
+            export DOCKER=y
+        fi
+        export PREFIX=mips-openwrt-linux-
+        export QEMU=qemu-mips
+        if [[ -d $STAGING_DIR ]]; then
+            export QEMU_LD_PREFIX=$(echo $STAGING_DIR/toolchain-*/)
+        fi
+        ;;
     mipsel-unknown-linux-gnu)
         if [[ -z $DOCKER ]]; then
             export DOCKER=y
