@@ -5,8 +5,8 @@ sudo: required
 
 matrix:
   include:
-    # - env: TARGET=mips-unknown-linux-musl
-    # - env: TARGET=mipsel-unknown-linux-musl
+    - env: TARGET=mips-unknown-linux-musl
+    - env: TARGET=mipsel-unknown-linux-musl
     - env: TARGET=aarch64-unknown-linux-gnu
     - env: TARGET=arm-unknown-linux-gnueabi
     - env: TARGET=arm-unknown-linux-gnueabihf
