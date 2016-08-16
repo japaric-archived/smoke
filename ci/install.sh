@@ -46,8 +46,10 @@ EOF
 main() {
     apt-get update
     install_qemu
+    install_c_toolchain
     install_rust
     add_rustup_target
+    configure_cargo
 }
 
 main
