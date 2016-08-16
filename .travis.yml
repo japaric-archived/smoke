@@ -26,6 +26,9 @@ matrix:
     # Ubuntu 16.04: Broken QEMU (apparently)
     - env: TARGET=powerpc64le-unknown-linux-gnu
 
+install:
+  - git clone --depth 1 https://github.com/rust-lang/libc
+
 script:
   - bash ci/script.sh
 
