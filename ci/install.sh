@@ -11,6 +11,8 @@ install_c_toolchain() {
     local openwrt_url=https://downloads.openwrt.org/snapshots/trunk
     local mipsel_tarball=malta/generic/OpenWrt-SDK-malta-le_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
 
+    apt-get install -y --no-install-recommends \
+            bzip2
     case $TARGET in
         mipsel-unknown-linux-musl)
             mkdir /openwrt
