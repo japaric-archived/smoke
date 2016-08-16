@@ -53,6 +53,7 @@ main() {
     else
         run_apps
         run_tests
+        libc_test
     fi
 }
 
