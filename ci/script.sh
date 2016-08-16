@@ -44,6 +44,9 @@ main() {
                       export PATH="$PATH:/root/.cargo/bin";
                       bash ci/install.sh;
                       bash ci/script.sh'
+    else
+        run_apps
+        run_tests
     fi
 }
 
