@@ -2,83 +2,48 @@ set -ex
 
 . $(dirname $0)/env.sh
 
-test_qemu() {
-    echo 'int main() { return 0; }' > qemu.c
-    ${PREFIX}gcc qemu.c
-    $QEMU ./a.out
+run() {
+    cargo run --target $TARGET --bin "${@}"
 }
 
-build() {
-    cargo build --target $TARGET
-    cargo build --target $TARGET --release
-    cargo test --target $TARGET --no-run
-    cargo test --target $TARGET --no-run --release
+run_apps() {
+    run start
+    run hello
+    set +e
+    run panic
+    [[ $? == "101" ]] || exit 1
+    set -e
+
+    run start --release
+    run hello --release
+    set +e
+    run panic --release
+    [[ $? == "101" ]] || exit 1
+    set -e
 }
 
 run_tests() {
     export RUST_TEST_THREADS=1
 
-    if [[ $QEMU ]]; then
-        # DEBUG
-        $QEMU target/$TARGET/debug/start
-        $QEMU target/$TARGET/debug/hello
-        set +e
-        $QEMU target/$TARGET/debug/panic
-        [[ $? == "101" ]] || exit 1
-        set -e
-        $QEMU target/$TARGET/debug/it_works-*
-        $QEMU target/$TARGET/debug/should_panic-*
-        $QEMU target/$TARGET/debug/catch_uwwind-*
-
-        # RELEASE
-        $QEMU target/$TARGET/release/start
-        $QEMU target/$TARGET/release/hello
-        set +e
-        $QEMU target/$TARGET/release/panic
-        [[ $? == "101" ]] || exit 1
-        set -e
-        $QEMU target/$TARGET/release/it_works-*
-        $QEMU target/$TARGET/release/should_panic-*
-        $QEMU target/$TARGET/release/catch_uwwind-*
-    else
-        # DEBUG
-        cargo run --bin start
-        cargo run --bin hello
-        set +e
-        cargo run --bin panic
-        [[ $? == "101" ]] || exit 1
-        set -e
-        cargo test --target $TARGET
-
-        # RELEASE
-        cargo run --bin start --release
-        cargo run --bin hello --release
-        set +e
-        cargo run --bin panic --release
-        [[ $? == "101" ]] || exit 1
-        set -e
-        cargo test --target $TARGET --release
-    fi
+    cargo test --target $TARGET
+    cargo test --target $TARGET --release
 }
 
 main() {
-    if [[ $DOCKER == "y" ]]; then
+    if [[ ${IN_DOCKER_CONTAINER:-n} == "n" ]]; then
+        local tag=2016-08-13
+
         docker run \
-               -e DOCKER=i \
+               --privileged \
+               -e IN_DOCKER_CONTAINER=y \
                -e TARGET=$TARGET \
                -v $(pwd):/mnt \
-               ubuntu:16.04 \
+               japaric/rustc-builtins:$tag \
                sh -c 'set -ex;
                       cd /mnt;
-                      export PATH="$PATH:$HOME/.cargo/bin";
+                      export PATH="$PATH:/root/.cargo/bin";
                       bash ci/install.sh;
                       bash ci/script.sh'
-    else
-        if [[ $QEMU ]]; then
-            test_qemu
-        fi
-        build
-        run_tests
     fi
 }
 
