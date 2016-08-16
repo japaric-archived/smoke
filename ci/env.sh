@@ -20,6 +20,7 @@ case $TARGET in
         export QEMU_LD_PREFIX=/usr/powerpc-linux-gnu
         ;;
     powerpc64-unknown-linux-gnu)
+        export CC_${TARGET//-/_}=powerpc64-linux-gnu-gcc
         export QEMU_LD_PREFIX=/usr/powerpc64-linux-gnu
         ;;
     powerpc64le-unknown-linux-gnu)

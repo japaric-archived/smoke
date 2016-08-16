@@ -29,6 +29,12 @@ run_tests() {
     cargo test --target $TARGET --release
 }
 
+libc_test() {
+    pushd libc/libc-test
+    cargo run --target $TARGET
+    popd
+}
+
 main() {
     if [[ ${IN_DOCKER_CONTAINER:-n} == "n" ]]; then
         local tag=2016-08-13
@@ -47,6 +53,7 @@ main() {
     else
         run_apps
         run_tests
+        libc_test
     fi
 }
 
