@@ -13,7 +13,6 @@ matrix:
     - env: TARGET=armv7-unknown-linux-gnueabihf
     - env: TARGET=i586-unknown-linux-gnu
     - env: TARGET=i686-unknown-linux-gnu
-    - env: TARGET=i686-unknown-linux-musl
     - env: TARGET=mips-unknown-linux-gnu
     - env: TARGET=mipsel-unknown-linux-gnu
     - env: TARGET=powerpc-unknown-linux-gnu
@@ -22,7 +21,9 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-gnu
     - env: TARGET=x86_64-unknown-linux-musl
   allow_failures:
-    # Broken QEMU
+    # rust-lang/rust#35599 catch_unwind broken
+    - env: TARGET=i686-unknown-linux-musl
+    # Ubuntu 16.04: Broken QEMU (apparently)
     - env: TARGET=powerpc64le-unknown-linux-gnu
 
 script:
