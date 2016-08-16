@@ -18,6 +18,7 @@ case $TARGET in
         export QEMU_LD_PREFIX=/usr/mipsel-linux-gnu
         ;;
     mipsel-unknown-linux-musl)
+        export CC_${TARGET//-/_}=${TARGET//unknown-/}-gcc
         CONFIGURE_CARGO=y
         if [[ -d $STAGING_DIR ]]; then
             export QEMU_LD_PREFIX=$(echo $STAGING_DIR/toolchain-*/)
@@ -27,7 +28,7 @@ case $TARGET in
         export QEMU_LD_PREFIX=/usr/powerpc-linux-gnu
         ;;
     powerpc64-unknown-linux-gnu)
-        export CC_${TARGET//-/_}=powerpc64-linux-gnu-gcc
+        export CC_${TARGET//-/_}=${TARGET//unknown-/}-gcc
         export QEMU_LD_PREFIX=/usr/powerpc64-linux-gnu
         ;;
     powerpc64le-unknown-linux-gnu)
