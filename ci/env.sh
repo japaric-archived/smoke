@@ -17,7 +17,7 @@ case $TARGET in
     mipsel-unknown-linux-gnu)
         export QEMU_LD_PREFIX=/usr/mipsel-linux-gnu
         ;;
-    mipsel-unknown-linux-musl)
+    mips*-unknown-linux-musl)
         export CC_${TARGET//-/_}=${TARGET//unknown-/}-gcc
         CONFIGURE_CARGO=y
         if [[ -d $STAGING_DIR ]]; then
