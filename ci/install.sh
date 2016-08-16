@@ -9,7 +9,7 @@ install_qemu() {
 
 install_c_toolchain() {
     local openwrt_root_url=https://downloads.openwrt.org/snapshots/trunk
-    local mips_tarball=malta/generic/OpenWrt-SDK-malta-le_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
+    local mips_tarball=ar71xx/generic/OpenWrt-SDK-ar71xx-generic_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
     local mipsel_tarball=malta/generic/OpenWrt-SDK-malta-le_gcc-5.3.0_musl-1.1.14.Linux-x86_64.tar.bz2
     case $TARGET in
         mips-unknown-linux-musl)
