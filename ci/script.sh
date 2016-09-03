@@ -49,25 +49,28 @@ run_std_tests() {
         unwind
     )
 
-    local crate lib_rs
+    local crate flags lib_rs
     for crate in ${crates[@]}; do
+        flags="--crate-name $crate --target $TARGET --test"
         lib_rs=$(rustc --print sysroot)/lib/rustlib/src/rust/src/lib$crate/lib.rs
 
+        # debug
         if [[ ${!linker} ]]; then
-            rustc --test --target $TARGET -C linker=${!linker} $lib_rs
+            rustc $flags -C linker=${!linker} $lib_rs
         else
-            rustc --test --target $TARGET $lib_rs
+            rustc $flags $lib_rs
         fi
-        ./$crate || ./lib
+        ./$crate
 
+        # release
         if [[ ${!linker} ]]; then
-            rustc --test --release --target $TARGET -C linker=${!linker} $lib_rs
+            rustc $flags -C linker=${!linker} -C opt-level=3 $lib_rs
         else
-            rustc --test --release --target $TARGET $lib_rs
+            rustc $flags -C opt-level=3 $lib_rs
         fi
-        ./$crate || ./lib
+        ./$crate
 
-        rm $crate || rm lib
+        rm $crate
     done
 
 }
