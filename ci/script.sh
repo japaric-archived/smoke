@@ -33,7 +33,7 @@ run_unit_tests() {
 
 run_std_tests() {
     # just coretest to start
-    rustc --target $TARGET $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
+    rustc --test --target $TARGET $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
     ./lib
     rm lib
 }
