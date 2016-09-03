@@ -19,6 +19,17 @@ main() {
     if [[ $OSX || ${IN_DOCKER_CONTAINER:-n} == y ]]; then
         install_rust
         add_rustup_target
+
+        # FIXME this should be installed in the docker image itself
+        if [[ $TARGET =~ .*86.*musl ]]; then
+            sudo apt-get install -y musl
+        fi
+
+        if [[ $QEMU_LD_PREFIX ]]; then
+            # FIXME don't do this, instead use update-binfmts to register the binfmts
+            sudo apt-get remove -y qemu-user-static
+            sudo apt-get install -y qemu-user-static
+        fi
     fi
 }
 
