@@ -22,7 +22,7 @@ run_apps() {
     set -e
 }
 
-run_tests() {
+run_unit_tests() {
     if [[ $QEMU_LD_PREFIX ]]; then
         export RUST_TEST_THREADS=1
     fi
@@ -31,7 +31,14 @@ run_tests() {
     cargo test --target $TARGET --release
 }
 
-libc_test() {
+run_std_tests() {
+    # just coretest to start
+    rustc --target $TARGET $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
+    ./lib
+    rm lib
+}
+
+run_libc_test() {
     cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml
 }
 
@@ -57,8 +64,9 @@ su -c 'bash ci/install.sh && bash ci/script.sh' $user
 "
     else
         run_apps
-        run_tests
-        libc_test
+        run_unit_tests
+        run_std_tests
+        run_libc_test
     fi
 }
 

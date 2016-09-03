@@ -15,10 +15,15 @@ add_rustup_target() {
     fi
 }
 
+add_rust_src() {
+    rustup component add rust-src
+}
+
 main() {
     if [[ $OSX || ${IN_DOCKER_CONTAINER:-n} == y ]]; then
         install_rust
         add_rustup_target
+        add_rust_src
 
         # FIXME this should be installed in the docker image itself
         if [[ $TARGET =~ .*86.*musl ]]; then
