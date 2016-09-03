@@ -1,0 +1,34 @@
+environment:
+  matrix:
+    - TARGET: i586-pc-windows-msvc
+    - TARGET: x86_64-pc-windows-msvc
+    - TARGET: x86_64-pc-windows-gnu
+    - TARGET: i686-pc-windows-msvc
+    - TARGET: i686-pc-windows-gnu
+
+install:
+  - curl -sSf -o rustup-init.exe https://win.rustup.rs
+  - rustup-init.exe --default-host %TARGET% --default-toolchain nightly -y
+  - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+  - rustc -Vv
+  - cargo -V
+
+build: false
+
+test_script:
+  - cargo run --bin start
+  - cargo run --bin hello
+  # TODO How do I check the exit code?
+  # - cargo run --bin panic
+  - cargo run --bin start --release
+  - cargo run --bin hello --release
+  # TODO How do I check the exit code?
+  # - cargo run --bin panic --release
+  - cargo test
+  - cargo test --release
+  - git clone --depth 1 https://github.com/rust-lang/libc
+  - cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml
+
+branches:
+  only:
+    - master
