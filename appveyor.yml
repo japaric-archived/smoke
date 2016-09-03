@@ -27,7 +27,7 @@ test_script:
   - cargo test
   - cargo test --release
   - git clone --depth 1 https://github.com/rust-lang/libc
-  - cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml
+  - cargo run --manifest-path libc/libc-test/Cargo.toml
 
 branches:
   only:
