@@ -35,6 +35,11 @@ matrix:
     - env: TARGET=i686-unknown-linux-musl
     # Ubuntu 16.04: Broken QEMU
     - env: TARGET=powerpc64le-unknown-linux-gnu
+    # FIXME(osx) some problems when compiling libc-test
+    - os: osx
+      env: TARGET=i686-apple-darwin
+    - os: osx
+      env: TARGET=x86_64-apple-darwin
 
 install:
   - git clone --depth 1 https://github.com/rust-lang/libc
