@@ -1,3 +1,4 @@
+
 case $TRAVIS_OS_NAME in
     linux)
         HOST=x86_64-unknown-linux-gnu
@@ -25,4 +26,8 @@ if [[ $LINUX ]]; then
     esac
 
     export QEMU_LD_PREFIX
+fi
+
+if [[ -e ~/.cargo/env ]]; then
+    source ~/.cargo/env
 fi
