@@ -37,7 +37,7 @@ libc_test() {
 }
 
 main() {
-    if [[ ${IN_DOCKER_CONTAINER:-n} == "n" ]]; then
+    if [[ $LINUX && ${IN_DOCKER_CONTAINER:-n} == n ]]; then
         local gid=$(id -g) group=$(id -g -n) uid=$(id -u) user=$(id -u -n)
 
         docker run \
