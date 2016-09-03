@@ -32,7 +32,6 @@ run_tests() {
 }
 
 libc_test() {
-    git clone --depth 1 https://github.com/rust-lang/libc
     cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml
 }
 
