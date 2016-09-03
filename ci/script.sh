@@ -53,6 +53,7 @@ set -ex
 update-binfmts --import
 groupadd -g $gid $group
 useradd -m -g $gid -u $uid $user
+cd /mnt
 su -c 'bash ci/install.sh && bash ci/script.sh' $user
 "
     else
