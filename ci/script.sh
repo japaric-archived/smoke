@@ -33,15 +33,43 @@ run_unit_tests() {
 
 run_std_tests() {
     local linker=CC_${TARGET//-/_}
+    local crates=(
+        alloc
+        alloc_system
+        collections
+        collectionstest
+        coretest
+        getopts
+        panic_abort
+        rand
+        rustc_bitflags
+        std
+        term
+        test
+        unwind
+    )
 
-    # just coretest to start
-    if [[ ${!linker} ]]; then
-        rustc --test --target $TARGET -C linker=${!linker} $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
-    else
-        rustc --test --target $TARGET $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
-    fi
-    ./lib
-    rm lib
+    local crate lib_rs
+    for crate in $crates; do
+        lib_rs=$(rustc --print sysroot)/lib/rustlib/src/rust/src/lib$crate/lib.rs
+
+        if [[ ${!linker} ]]; then
+            rustc --test --target $TARGET -C linker=${!linker} $lib_rs
+        else
+            rustc --test --target $TARGET $lib_rs
+        fi
+        ./$1 || ./lib
+
+        if [[ ${!linker} ]]; then
+            rustc --test --release --target $TARGET -C linker=${!linker} $lib_rs
+        else
+            rustc --test --release --target $TARGET $lib_rs
+        fi
+        ./$1 || ./lib
+
+        rm $1 || rm lib
+    done
+
 }
 
 run_libc_test() {
