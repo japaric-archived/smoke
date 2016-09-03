@@ -40,6 +40,7 @@ matrix:
     - env: TARGET=i686-unknown-linux-gnu
     - env: TARGET=aarch64-unknown-linux-gnu
     - env: TARGET=mips-unknown-linux-musl
+    - env: TARGET=x86_64-unknown-linux-musl
     # FIXME(osx) some problems when compiling libc-test
     - os: osx
       env: TARGET=i686-apple-darwin
