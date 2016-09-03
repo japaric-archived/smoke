@@ -1,6 +1,8 @@
-[![Build Status][status]](https://travis-ci.org/japaric/smoke)
+[![Travis][travis]](https://travis-ci.org/japaric/smoke)
+[![AppVeyor][appveyor]](https://ci.appveyor.com/project/japaric/smoke)
 
-[status]: https://travis-ci.org/japaric/smoke.svg?branch=master
+[appveyor]: https://ci.appveyor.com/api/projects/status/67t9m8nhj5wb965b?svg=true
+[travis]: https://travis-ci.org/japaric/smoke.svg?branch=master
 
 # `smoke`
 
