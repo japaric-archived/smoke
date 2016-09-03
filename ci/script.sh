@@ -58,16 +58,16 @@ run_std_tests() {
         else
             rustc --test --target $TARGET $lib_rs
         fi
-        ./$1 || ./lib
+        ./$crate || ./lib
 
         if [[ ${!linker} ]]; then
             rustc --test --release --target $TARGET -C linker=${!linker} $lib_rs
         else
             rustc --test --release --target $TARGET $lib_rs
         fi
-        ./$1 || ./lib
+        ./$crate || ./lib
 
-        rm $1 || rm lib
+        rm $crate || rm lib
     done
 
 }
