@@ -27,9 +27,9 @@ matrix:
 
     # OSX
     - os: osx
-      env:
-        - TARGET=i686-apple-darwin
-        - TARGET=x86_64-apple-darwin
+      env: TARGET=i686-apple-darwin
+    - os: osx
+      env: TARGET=x86_64-apple-darwin
   allow_failures:
     # rust-lang/rust#35599 catch_unwind broken
     - env: TARGET=i686-unknown-linux-musl
