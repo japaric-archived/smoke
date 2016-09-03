@@ -67,7 +67,7 @@ No idea how to test these
 
 ### AppVeyor
 
-- [x] i586-pc-windows-msvc
+- [ ] i586-pc-windows-msvc
 - [x] i686-pc-windows-gnu
 - [x] i686-pc-windows-msvc
 - [x] x86_64-pc-windows-gnu
