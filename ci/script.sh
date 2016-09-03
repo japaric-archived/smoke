@@ -50,7 +50,7 @@ run_std_tests() {
     )
 
     local crate lib_rs
-    for crate in $crates; do
+    for crate in ${crates[@]}; do
         lib_rs=$(rustc --print sysroot)/lib/rustlib/src/rust/src/lib$crate/lib.rs
 
         if [[ ${!linker} ]]; then
