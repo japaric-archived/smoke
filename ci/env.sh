@@ -14,6 +14,9 @@ esac
 
 if [[ $LINUX ]]; then
     case $TARGET in
+        armv7-unknown-linux-gnueabihf)
+            QEMU_LD_PREFIX=/usr/arm-linux-gnueabihf
+            ;;
         aarch64-unknown-linux-gnu |\
             arm-unknown-linux-gnueabi |\
             arm*-unknown-linux-gnueabihf |\
