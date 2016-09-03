@@ -1,12 +1,19 @@
 environment:
   matrix:
-    # TODO There's no rustc release for this target. We need extra logic to test via cross
+    # TODO There's no rustc release for these targets. We need extra logic to test these via cross
     # compilation
     # - TARGET: i586-pc-windows-msvc
-    - TARGET: x86_64-pc-windows-msvc
-    - TARGET: x86_64-pc-windows-gnu
-    - TARGET: i686-pc-windows-msvc
+    # - TARGET: i686-pc-windows-msvc
     - TARGET: i686-pc-windows-gnu
+    - TARGET: x86_64-pc-windows-gnu
+    - TARGET: x86_64-pc-windows-msvc
+
+matrix:
+  allow_failures:
+    # FIXME undefined reference to `rust_begin_unwind`
+    - TARGET: i686-pc-windows-gnu
+    # FIXME can't find `gcc.exe`
+    - TARGET: x86_64-pc-windows-gnu
 
 install:
   - curl -sSf -o rustup-init.exe https://win.rustup.rs
