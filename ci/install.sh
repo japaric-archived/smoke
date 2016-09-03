@@ -22,7 +22,7 @@ main() {
 
         # FIXME this should be installed in the docker image itself
         if [[ $TARGET =~ .*86.*musl ]]; then
-            sudo apt-get install -y musl
+            sudo apt-get install -y musl-tools
         fi
 
         if [[ $QEMU_LD_PREFIX ]]; then
