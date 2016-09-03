@@ -19,7 +19,7 @@ if [[ $LINUX ]]; then
             arm*-unknown-linux-gnueabihf |\
             mips*-unknown-linux-gnu |\
             powerpc*-unknown-linux-gnu)
-            QEMU_LD_PREFIX=${TARGET//unknown-/}
+            QEMU_LD_PREFIX=/usr/${TARGET//unknown-/}
             ;;
         mips*-unknown-linux-musl)
             export STAGING_DIR=/openwrt/$TARGET/staging_dir
