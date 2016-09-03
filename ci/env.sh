@@ -1,3 +1,5 @@
+# rustup
+export PATH="$HOME/.cargo/bin:$PATH"
 
 case $TRAVIS_OS_NAME in
     linux)
@@ -26,8 +28,4 @@ if [[ $LINUX ]]; then
     esac
 
     export QEMU_LD_PREFIX
-fi
-
-if [[ -e ~/.cargo/env ]]; then
-    source ~/.cargo/env
 fi
