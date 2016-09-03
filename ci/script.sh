@@ -32,8 +32,14 @@ run_unit_tests() {
 }
 
 run_std_tests() {
+    local linker=CC_${TARGET//-/_}
+
     # just coretest to start
-    rustc --test --target $TARGET $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
+    if [[ ${!linker} ]]; then
+        rustc --test --target $TARGET -C linker=${!linker} $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
+    else
+        rustc --test --target $TARGET $(rustc --print sysroot)/lib/rustlib/src/rust/src/libcoretest/lib.rs
+    fi
     ./lib
     rm lib
 }
