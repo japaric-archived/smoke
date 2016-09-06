@@ -2,37 +2,109 @@ set -ex
 
 . $(dirname $0)/env.sh
 
+failures=()
+
+try() {
+    set +e
+    eval "$2"
+
+    if [[ $? != 0 ]]; then
+        failures+=( $1 )
+    fi
+    set -e
+}
+
 run() {
     cargo run --target $TARGET --bin "${@}"
 }
 
 run_apps() {
-    run start
-    run hello
-    set +e
-    run panic
-    [[ $? == 101 ]] || exit 1
-    set -e
+    try 'start.debug' "run start"
+    try 'hello.debug' "run hello"
+    try 'panic.debug' "
+run panic
+[[ \$? == 101 ]] || exit 1
+"
 
-    run start --release
-    run hello --release
-    set +e
-    run panic --release
-    [[ $? == 101 ]] || exit 1
-    set -e
+    try 'start.release' "run start --release"
+    try 'hello.release' "run hello --release"
+    try 'panic.release' "
+run panic --release
+[[ \$? == 101 ]] || exit 1
+"
 }
 
-run_tests() {
+run_unit_tests() {
     if [[ $QEMU_LD_PREFIX ]]; then
         export RUST_TEST_THREADS=1
     fi
 
-    cargo test --target $TARGET
-    cargo test --target $TARGET --release
+    try 'cargo_test.debug' "cargo test --target $TARGET"
+    try 'cargo_test.release' "cargo test --target $TARGET --release"
 }
 
-libc_test() {
-    cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml
+run_std_tests() {
+    local linker=CC_${TARGET//-/_}
+    local crates=(
+        alloc
+        alloc_system
+        collections
+        collectionstest
+        coretest
+        getopts
+        panic_abort
+        rand
+        rustc_bitflags
+        std
+        term
+        test
+        unwind
+    )
+
+    local crate flags lib_rs
+    for crate in ${crates[@]}; do
+        flags="--crate-name $crate --target $TARGET --test"
+        lib_rs=$(rustc --print sysroot)/lib/rustlib/src/rust/src/lib$crate/lib.rs
+
+        # debug
+        if [[ ${!linker} ]]; then
+            rustc $flags -C linker=${!linker} $lib_rs
+        else
+            rustc $flags $lib_rs
+        fi
+        try "$crate.debug" "./$crate"
+
+        # release
+        if [[ ${!linker} ]]; then
+            rustc $flags -C linker=${!linker} -C opt-level=3 $lib_rs
+        else
+            rustc $flags -C opt-level=3 $lib_rs
+        fi
+        try "$crate.release" "./$crate"
+
+        rm $crate
+    done
+}
+
+run_libc_test() {
+    try 'libc_test' "cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml"
+}
+
+report_failures() {
+    set +x
+
+    if [[ $failures ]]; then
+        echo FAILURES
+        echo --------
+
+        for failure in ${failures[@]}; do
+            echo $failure
+        done
+
+        exit 1
+    fi
+
+    set -x
 }
 
 main() {
@@ -57,8 +129,10 @@ su -c 'bash ci/install.sh && bash ci/script.sh' $user
 "
     else
         run_apps
-        run_tests
-        libc_test
+        run_unit_tests
+        run_std_tests
+        run_libc_test
+        report_failures
     fi
 }
 
