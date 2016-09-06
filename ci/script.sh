@@ -19,8 +19,8 @@ run() {
 }
 
 run_apps() {
-    try 'start.debug' run start
-    try 'hello.debug' run hello
+    try 'start.debug' "run start"
+    try 'hello.debug' "run hello"
     try 'panic.debug' "
 run panic
 [[ \$? == 101 ]] || exit 1
