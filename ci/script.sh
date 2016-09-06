@@ -2,24 +2,36 @@ set -ex
 
 . $(dirname $0)/env.sh
 
+failures=()
+
+try() {
+    set +e
+    eval "$2"
+
+    if [[ $? != 0 ]]; then
+        failures+=( $1 )
+    fi
+    set -e
+}
+
 run() {
     cargo run --target $TARGET --bin "${@}"
 }
 
 run_apps() {
-    run start
-    run hello
-    set +e
-    run panic
-    [[ $? == 101 ]] || exit 1
-    set -e
+    try 'start.debug' run start
+    try 'hello.debug' run hello
+    try 'panic.debug' "
+run panic
+[[ \$? == 101 ]] || exit 1
+"
 
-    run start --release
-    run hello --release
-    set +e
-    run panic --release
-    [[ $? == 101 ]] || exit 1
-    set -e
+    try 'start.release' "run start --release"
+    try 'hello.release' "run hello --release"
+    try 'panic.release' "
+run panic --release
+[[ \$? == 101 ]] || exit 1
+"
 }
 
 run_unit_tests() {
@@ -27,8 +39,8 @@ run_unit_tests() {
         export RUST_TEST_THREADS=1
     fi
 
-    cargo test --target $TARGET
-    cargo test --target $TARGET --release
+    try 'cargo_test.debug' "cargo test --target $TARGET"
+    try 'cargo_test.release' "cargo test --target $TARGET --release"
 }
 
 run_std_tests() {
@@ -60,7 +72,7 @@ run_std_tests() {
         else
             rustc $flags $lib_rs
         fi
-        ./$crate
+        try "$crate.debug" "./$crate"
 
         # release
         if [[ ${!linker} ]]; then
@@ -68,15 +80,31 @@ run_std_tests() {
         else
             rustc $flags -C opt-level=3 $lib_rs
         fi
-        ./$crate
+        try "$crate.release" "./$crate"
 
         rm $crate
     done
-
 }
 
 run_libc_test() {
-    cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml
+    try 'libc_test' "cargo run --target $TARGET --manifest-path libc/libc-test/Cargo.toml"
+}
+
+report_failures() {
+    set +x
+
+    if [[ $failures ]]; then
+        echo FAILURES
+        echo --------
+
+        for failure in ${failures[@]}; do
+            echo $failure
+        done
+
+        exit 1
+    fi
+
+    set -x
 }
 
 main() {
@@ -104,6 +132,7 @@ su -c 'bash ci/install.sh && bash ci/script.sh' $user
         run_unit_tests
         run_std_tests
         run_libc_test
+        report_failures
     fi
 }
 

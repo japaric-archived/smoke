@@ -30,22 +30,6 @@ matrix:
       env: TARGET=i686-apple-darwin
     - os: osx
       env: TARGET=x86_64-apple-darwin
-  allow_failures:
-    # rust-lang/rust#35599 catch_unwind broken
-    - env: TARGET=i686-unknown-linux-musl
-    # Ubuntu 16.04: Broken QEMU
-    - env: TARGET=powerpc64le-unknown-linux-gnu
-    # FIXME(rust-lang/libc#357) libc failures
-    - env: TARGET=i586-unknown-linux-gnu
-    - env: TARGET=i686-unknown-linux-gnu
-    - env: TARGET=aarch64-unknown-linux-gnu
-    - env: TARGET=mips-unknown-linux-musl
-    - env: TARGET=x86_64-unknown-linux-musl
-    # FIXME(osx) some problems when compiling libc-test
-    - os: osx
-      env: TARGET=i686-apple-darwin
-    - os: osx
-      env: TARGET=x86_64-apple-darwin
 
 install:
   - git clone --depth 1 https://github.com/rust-lang/libc
