@@ -54,6 +54,13 @@ x86_musl() {
         tar -xz
 
     pushd musl-$version
+    ./configure \
+          --prefix=/musl/x86_64-unknown-linux-musl \
+          --disable-shared
+    make -j$(nproc)
+    make install
+    make clean
+
     CFLAGS="$CFLAGS -m32" ./configure \
           --prefix=/musl/i686-unknown-linux-musl \
           --disable-shared \

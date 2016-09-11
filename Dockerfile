@@ -61,6 +61,10 @@ CXX_powerpc64_unknown_linux_gnu=powerpc64-linux-gnu-g++ \
 AR_powerpc64le_unknown_linux_gnu=powerpc64le-linux-gnu-ar \
 CARGO_TARGET_POWERPC64LE_UNKNOWN_LINUX_GNU_LINKER=powerpc64le-linux-gnu-gcc \
 CC_powerpc64le_unknown_linux_gnu=powerpc64le-linux-gnu-gcc \
-CXX_powerpc64le_unknown_linux_gnu=powerpc64le-linux-gnu-g++
+CXX_powerpc64le_unknown_linux_gnu=powerpc64le-linux-gnu-g++ \
+\
+CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=/musl/x86_64-unknown-linux-musl/bin/musl-gcc \
+CC_x86_64_unknown_linux_musl=/musl/x86_64-unknown-linux-musl/bin/musl-gcc \
+CXX_x86_64_unknown_linux_musl=false
 
 ENTRYPOINT sh
