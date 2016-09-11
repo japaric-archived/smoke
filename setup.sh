@@ -3,15 +3,12 @@ set -ex
 main() {
     apt-get update
 
-    # i*86-unknown-linux-gnu
-    apt-get install --no-install-recommends -y gcc-multilib
-
     apt-get install --no-install-recommends -y \
             `# QEMU` binfmt-support qemu-user-static \
             `# aarch64-unknown-linux-gnu` gcc-aarch64-linux-gnu libc6-dev-arm64-cross \
             `# arm*-unknown-linux-gnueabihf` gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
             `# arm-unknown-linux-gnueabi` gcc-arm-linux-gnueabi libc6-dev-armel-cross \
-            `# i*86-unknown-linux-gnu` libc6-dev-i386 \
+            `# i*86-unknown-linux-gnu` lib32gcc-5-dev libc6-dev-i386 \
             `# i686-unknown-linux-musl` make \
             `# mips*-unknown-linux-musl` bzip2 \
             `# mips-unknown-linux-gnu` gcc-mips-linux-gnu libc6-dev-mips-cross \
@@ -22,6 +19,8 @@ main() {
             `# rustup` ca-certificates curl \
             `# x86_64-unknown-linux-gnu` gcc libc6-dev \
             sudo
+
+    ln -s x86_64-linux-gnu/asm /usr/include/asm
 
     x86_musl
     mips_musl
