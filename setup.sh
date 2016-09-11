@@ -8,7 +8,7 @@ main() {
             `# aarch64-unknown-linux-gnu` gcc-aarch64-linux-gnu libc6-dev-arm64-cross \
             `# arm*-unknown-linux-gnueabihf` gcc-arm-linux-gnueabihf libc6-dev-armhf-cross \
             `# arm-unknown-linux-gnueabi` gcc-arm-linux-gnueabi libc6-dev-armel-cross \
-            `# i*86-unknown-linux-gnu` lib32gcc-5-dev libc6-dev-i386 \
+            `# i*86-unknown-linux-gnu` gcc-multilib libc6-dev-i386 \
             `# i686-unknown-linux-musl` make \
             `# mips*-unknown-linux-musl` bzip2 \
             `# mips-unknown-linux-gnu` gcc-mips-linux-gnu libc6-dev-mips-cross \
