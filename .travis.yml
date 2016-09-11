@@ -1,10 +1,17 @@
 dist: trusty
 language: generic
+osx_image: xcode7.3
 services: docker
 sudo: required
 
 matrix:
   include:
+    # OSX
+    - os: osx
+      env: TARGET=i686-apple-darwin
+    - os: osx
+      env: TARGET=x86_64-apple-darwin
+
     # LINUX
     - env: TARGET=i586-unknown-linux-gnu
     - env: TARGET=i686-unknown-linux-gnu
@@ -24,12 +31,6 @@ matrix:
     - env: TARGET=powerpc-unknown-linux-gnu
     - env: TARGET=powerpc64-unknown-linux-gnu
     - env: TARGET=powerpc64le-unknown-linux-gnu
-
-    # OSX
-    - os: osx
-      env: TARGET=i686-apple-darwin
-    - os: osx
-      env: TARGET=x86_64-apple-darwin
 
 install:
   - git clone --depth 1 https://github.com/rust-lang/libc
