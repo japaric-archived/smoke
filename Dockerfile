@@ -24,6 +24,10 @@ CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=arm-linux-gnueabihf-gcc \
 CC_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-gcc \
 CXX_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-g++ \
 \
+CARGO_TARGET_I686_UNKNOWN_LINUX_MUSL_LINKER=/musl/i686-unknown-linux-musl/bin/musl-gcc \
+CC_i686_unknown_linux_musl=/musl/i686-unknown-linux-musl/bin/musl-gcc \
+CXX_i686_unknown_linux_musl=false \
+\
 AR_mips_unknown_linux_gnu=mips-linux-gnu-ar \
 CARGO_TARGET_MIPS_UNKNOWN_LINUX_GNU_LINKER=mips-linux-gnu-gcc \
 CC_mips_unknown_linux_gnu=mips-linux-gnu-gcc \
