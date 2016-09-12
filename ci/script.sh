@@ -130,8 +130,8 @@ su -c 'bash ci/install.sh && bash ci/script.sh' $user
     else
         run_apps
         run_unit_tests
-        run_std_tests
         run_libc_test
+        run_std_tests
         report_failures
     fi
 }
