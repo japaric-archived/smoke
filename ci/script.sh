@@ -55,11 +55,14 @@ run_std_tests() {
         panic_abort
         rand
         rustc_bitflags
-        std
         term
         test
         unwind
     )
+    # FIXME re-enable std
+    # This has been disabled because it fails when cross testing targets like arm, aarch64 and mips
+    # due to QEMU limitations
+    # std
 
     local crate flags lib_rs
     for crate in ${crates[@]}; do
