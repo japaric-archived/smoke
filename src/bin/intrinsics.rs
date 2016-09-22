@@ -114,8 +114,10 @@ pub fn __aeabi_unwind_cpp_pr0() {}
 pub fn __aeabi_unwind_cpp_pr1() {}
 
 // Lang items
+#[cfg(not(test))]
 #[lang = "eh_personality"]
 extern fn eh_personality() {}
 
+#[cfg(not(test))]
 #[lang = "panic_fmt"]
 extern fn panic_fmt() {}
