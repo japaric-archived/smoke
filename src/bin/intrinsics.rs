@@ -2,10 +2,12 @@
 #![deny(dead_code)]
 #![feature(compiler_builtins_lib)]
 #![feature(lang_items)]
+#![feature(libc)]
 #![feature(start)]
 #![no_std]
 
 extern crate compiler_builtins;
+extern crate libc;
 
 // trunccdfsf2
 fn aeabi_d2f(x: f64) -> f32 {
@@ -210,9 +212,6 @@ fn main(_: isize, _: *const *const u8) -> isize {
 
     0
 }
-
-#[link(name = "c")]
-extern "C" {}
 
 // ARM targets need these symbols
 #[no_mangle]
