@@ -12,6 +12,13 @@ cargo run --target $Env:TARGET --bin hello --release
 # TODO How do I check the exit code?
 # - cargo run --target %TARGET% --bin panic --release
 
+Copy-Item src\bin\intrinsics.rs src\bin\intrinsics.rs.bk
+Get-Content src\bin\intrinsics.rs.bk | Where-Object {$_ -notmatch 'compiler_builtins'} | Set-Content src\bin\intrinsics.rs
+'Intrinsics provided by compiler_builtins'
+cargo build --target $Env:TARGET --bin intrinsics 2>&1 | Select-String -pattern 'unresolved'
+'---'
+Copy-Item src\bin\intrinsics.rs.bk src\bin\intrinsics.rs
+
 cargo test --target $Env:TARGET
 cargo test --target $Env:TARGET --release
 
