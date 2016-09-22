@@ -34,6 +34,20 @@ run panic --release
 "
 }
 
+run_intrinsics() {
+    if [[ $LINUX ]]; then
+        try 'intrinsics' "cargo build --target $TARGET --bin intrinsics"
+
+        cp src/bin/intrinsics.rs{,.bk}
+        sed -i '/compiler_builtins/d' src/bin/intrinsics.rs
+        set +x
+        echo 'Intrinsics provided by compiler_builtins'
+        cargo build --target $TARGET --bin intrinsics 2>&1 | grep undefined | cut -d'`' -f2
+        set -x
+        mv src/bin/intrinsics.rs{.bk,}
+    fi
+}
+
 run_unit_tests() {
     if [[ $QEMU_LD_PREFIX ]]; then
         export RUST_TEST_THREADS=1
@@ -132,6 +146,7 @@ su -c 'bash ci/install.sh && bash ci/script.sh' $user
 "
     else
         run_apps
+        run_intrinsics
         run_unit_tests
         run_libc_test
         run_std_tests
