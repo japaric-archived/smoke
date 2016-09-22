@@ -38,7 +38,7 @@ run_intrinsics() {
     try 'intrinsics' "cargo build --target $TARGET --bin intrinsics"
 
     cp src/bin/intrinsics.rs{,.bk}
-    sed -i '/compiler_builtins/d' src/bin/intrinsics.rs
+    $SED -i '/compiler_builtins/d' src/bin/intrinsics.rs
     set +x
     echo 'Intrinsics provided by compiler_builtins'
     cargo build --target $TARGET --bin intrinsics 2>&1 | grep undefined | cut -d'`' -f2
