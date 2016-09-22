@@ -131,6 +131,7 @@ main() {
         docker run \
                --entrypoint bash \
                --privileged \
+               -e FLOAT=$FLOAT \
                -e IN_DOCKER_CONTAINER=y \
                -e TARGET=$TARGET \
                -e TRAVIS_OS_NAME=$TRAVIS_OS_NAME \
