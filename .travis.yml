@@ -10,14 +10,22 @@ matrix:
     - os: osx
       env: TARGET=i686-apple-darwin
     - os: osx
+      env: TARGET=i686-apple-darwin FLOAT=soft
+    - os: osx
       env: TARGET=x86_64-apple-darwin
+    - os: osx
+      env: TARGET=x86_64-apple-darwin FLOAT=soft
 
     # LINUX
     - env: TARGET=i586-unknown-linux-gnu
     - env: TARGET=i686-unknown-linux-gnu
+    - env: TARGET=i686-unknown-linux-gnu FLOAT=soft
     - env: TARGET=i686-unknown-linux-musl
+    - env: TARGET=i686-unknown-linux-musl FLOAT=soft
     - env: TARGET=x86_64-unknown-linux-gnu
+    - env: TARGET=x86_64-unknown-linux-gnu FLOAT=soft
     - env: TARGET=x86_64-unknown-linux-musl
+    - env: TARGET=x86_64-unknown-linux-musl FLOAT=soft
 
     # LINUX-CROSS
     - env: TARGET=aarch64-unknown-linux-gnu
@@ -25,12 +33,17 @@ matrix:
     - env: TARGET=arm-unknown-linux-gnueabihf
     - env: TARGET=armv7-unknown-linux-gnueabihf
     - env: TARGET=mips-unknown-linux-gnu
+    - env: TARGET=mips-unknown-linux-gnu FLOAT=soft
     - env: TARGET=mips-unknown-linux-musl
     - env: TARGET=mipsel-unknown-linux-gnu
+    - env: TARGET=mipsel-unknown-linux-gnu FLOAT=soft
     - env: TARGET=mipsel-unknown-linux-musl
     - env: TARGET=powerpc-unknown-linux-gnu
+    - env: TARGET=powerpc-unknown-linux-gnu FLOAT=soft
     - env: TARGET=powerpc64-unknown-linux-gnu
+    - env: TARGET=powerpc64-unknown-linux-gnu FLOAT=soft
     - env: TARGET=powerpc64le-unknown-linux-gnu
+    - env: TARGET=powerpc64le-unknown-linux-gnu FLOAT=soft
 
 install:
   - git clone --depth 1 https://github.com/rust-lang/libc

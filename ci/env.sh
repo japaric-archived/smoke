@@ -32,3 +32,7 @@ if [[ $LINUX ]]; then
 
     export QEMU_LD_PREFIX
 fi
+
+if [[ $FLOAT == soft ]]; then
+    export RUSTFLAGS="-C target-feature=+soft-float"
+fi
