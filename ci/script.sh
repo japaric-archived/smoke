@@ -39,11 +39,18 @@ run_intrinsics() {
 
     cp src/bin/intrinsics.rs{,.bk}
     $SED -i '/compiler_builtins/d' src/bin/intrinsics.rs
+    set +e
+    local stderr=$(cargo rustc --target $TARGET --bin intrinsics -- -Z print-link-args 3>&1 1>&2 2>&3 3>&-)
+    set -e
+
+    echo "$stderr"
+
     set +x
     echo 'Intrinsics provided by compiler_builtins'
-    cargo build --target $TARGET --bin intrinsics
+    echo "$stderr" | grep undefined | cut -d'`' -f2
     echo '---'
     set -x
+
     mv src/bin/intrinsics.rs{.bk,}
 }
 
