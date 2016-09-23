@@ -35,17 +35,23 @@ run panic --release
 }
 
 run_intrinsics() {
-    if [[ $LINUX ]]; then
-        try 'intrinsics' "cargo build --target $TARGET --bin intrinsics"
+    try 'intrinsics' "cargo build --target $TARGET --bin intrinsics"
 
-        cp src/bin/intrinsics.rs{,.bk}
-        sed -i '/compiler_builtins/d' src/bin/intrinsics.rs
-        set +x
-        echo 'Intrinsics provided by compiler_builtins'
-        cargo build --target $TARGET --bin intrinsics 2>&1 | grep undefined | cut -d'`' -f2
-        set -x
-        mv src/bin/intrinsics.rs{.bk,}
-    fi
+    cp src/bin/intrinsics.rs{,.bk}
+    $SED -i '/compiler_builtins/d' src/bin/intrinsics.rs
+    set +e
+    local stderr=$(cargo rustc --target $TARGET --bin intrinsics -- -Z print-link-args 3>&1 1>&2 2>&3 3>&-)
+    set -e
+
+    echo "$stderr"
+
+    set +x
+    echo 'Intrinsics provided by compiler_builtins'
+    echo "$stderr" | grep undefined | cut -d'`' -f2
+    echo '---'
+    set -x
+
+    mv src/bin/intrinsics.rs{.bk,}
 }
 
 run_unit_tests() {

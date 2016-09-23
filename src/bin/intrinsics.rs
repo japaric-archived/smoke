@@ -1,11 +1,16 @@
 #![allow(unused_features)]
 #![deny(dead_code)]
 #![feature(compiler_builtins_lib)]
+#![feature(core_float)]
 #![feature(lang_items)]
+#![feature(libc)]
 #![feature(start)]
 #![no_std]
 
 extern crate compiler_builtins;
+extern crate libc;
+
+use core::num::Float;
 
 // trunccdfsf2
 fn aeabi_d2f(x: f64) -> f32 {
@@ -23,18 +28,33 @@ fn aeabi_d2l(x: f64) -> i64 {
 }
 
 // fixunsdfsi
-fn aeabi_d2ui(x: f64) -> u32 {
+fn aeabi_d2uiz(x: f64) -> u32 {
     x as u32
 }
 
 // fixunsdfdi
-fn aeabi_d2ul(x: f64) -> u64 {
+fn aeabi_d2ulz(x: f64) -> u64 {
     x as u64
 }
 
 // adddf3
 fn aeabi_dadd(a: f64, b: f64) -> f64 {
     a + b
+}
+
+// eqdf2
+fn aeabi_dcmpeq(a: f64, b: f64) -> bool {
+    a == b
+}
+
+// gtdf2
+fn aeabi_dcmpgt(a: f64, b: f64) -> bool {
+    a > b
+}
+
+// ltdf2
+fn aeabi_dcmplt(a: f64, b: f64) -> bool {
+    a < b
 }
 
 // divdf3
@@ -58,28 +78,43 @@ fn aeabi_f2d(x: f32) -> f64 {
 }
 
 // fixsfsi
-fn aeabi_f2i(x: f32) -> i32 {
+fn aeabi_f2iz(x: f32) -> i32 {
     x as i32
 }
 
 // fixsfdi
-fn aeabi_f2l(x: f32) -> i64 {
+fn aeabi_f2lz(x: f32) -> i64 {
     x as i64
 }
 
 // fixunssfsi
-fn aeabi_f2ui(x: f32) -> u32 {
+fn aeabi_f2uiz(x: f32) -> u32 {
     x as u32
 }
 
 // fixunssfdi
-fn aeabi_f2ul(x: f32) -> u64 {
+fn aeabi_f2ulz(x: f32) -> u64 {
     x as u64
 }
 
 // addsf3
 fn aeabi_fadd(a: f32, b: f32) -> f32 {
     a + b
+}
+
+// eqsf2
+fn aeabi_fcmpeq(a: f32, b: f32) -> bool {
+    a == b
+}
+
+// gtsf2
+fn aeabi_fcmpgt(a: f32, b: f32) -> bool {
+    a > b
+}
+
+// ltsf2
+fn aeabi_fcmplt(a: f32, b: f32) -> bool {
+    a < b
 }
 
 // divsf3
@@ -107,6 +142,10 @@ fn aeabi_i2f(x: i32) -> f32 {
     x as f32
 }
 
+fn aeabi_idiv(a: i32, b: i32) -> i32 {
+    a.wrapping_div(b)
+}
+
 fn aeabi_idivmod(a: i32, b: i32) -> i32 {
     a % b
 }
@@ -124,6 +163,11 @@ fn aeabi_l2f(x: i64) -> f32 {
 // divdi3
 fn aeabi_ldivmod(a: i64, b: i64) -> i64 {
     a / b
+}
+
+// muldi3
+fn aeabi_lmul(a: i64, b: i64) -> i64 {
+    a.wrapping_mul(b)
 }
 
 // floatunsidf
@@ -167,6 +211,14 @@ fn mulodi4(a: i64, b: i64) -> i64 {
     a * b
 }
 
+fn powidf2(a: f64, b: i32) -> f64 {
+    a.powi(b)
+}
+
+fn powisf2(a: f32, b: i32) -> f32 {
+    a.powi(b)
+}
+
 fn umoddi3(a: u64, b: u64) -> u64 {
     a % b
 }
@@ -176,27 +228,35 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_d2f(2.);
     aeabi_d2i(2.);
     aeabi_d2l(2.);
-    aeabi_d2ui(2.);
-    aeabi_d2ul(2.);
+    aeabi_d2uiz(2.);
+    aeabi_d2ulz(2.);
     aeabi_dadd(2., 3.);
+    aeabi_dcmpeq(2., 3.);
+    aeabi_dcmpgt(2., 3.);
+    aeabi_dcmplt(2., 3.);
     aeabi_ddiv(2., 3.);
     aeabi_dmul(2., 3.);
     aeabi_dsub(2., 3.);
     aeabi_f2d(2.);
-    aeabi_f2i(2.);
-    aeabi_f2l(2.);
-    aeabi_f2ui(2.);
-    aeabi_f2ul(2.);
+    aeabi_f2iz(2.);
+    aeabi_f2lz(2.);
+    aeabi_f2uiz(2.);
+    aeabi_f2ulz(2.);
     aeabi_fadd(2., 3.);
+    aeabi_fcmpeq(2., 3.);
+    aeabi_fcmpgt(2., 3.);
+    aeabi_fcmplt(2., 3.);
     aeabi_fdiv(2., 3.);
     aeabi_fmul(2., 3.);
     aeabi_fsub(2., 3.);
     aeabi_i2d(2);
     aeabi_i2f(2);
+    aeabi_idiv(2, 3);
     aeabi_idivmod(2, 3);
     aeabi_l2d(2);
     aeabi_l2f(2);
     aeabi_ldivmod(2, 3);
+    aeabi_lmul(2, 3);
     aeabi_ui2d(2);
     aeabi_ui2f(2);
     aeabi_uidiv(2, 3);
@@ -206,13 +266,12 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_uldivmod(2, 3);
     moddi3(2, 3);
     mulodi4(2, 3);
+    powidf2(2., 3);
+    powisf2(2., 3);
     umoddi3(2, 3);
 
     0
 }
-
-#[link(name = "c")]
-extern "C" {}
 
 // ARM targets need these symbols
 #[no_mangle]

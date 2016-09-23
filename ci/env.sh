@@ -5,10 +5,12 @@ case $TRAVIS_OS_NAME in
     linux)
         HOST=x86_64-unknown-linux-gnu
         LINUX=1
+        SED=sed
         ;;
     osx)
         HOST=x86_64-apple-darwin
         OSX=1
+        SED=gsed
         ;;
 esac
 
