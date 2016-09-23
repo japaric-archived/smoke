@@ -1,6 +1,7 @@
 #![allow(unused_features)]
 #![deny(dead_code)]
 #![feature(compiler_builtins_lib)]
+#![feature(core_float)]
 #![feature(lang_items)]
 #![feature(libc)]
 #![feature(start)]
@@ -8,6 +9,8 @@
 
 extern crate compiler_builtins;
 extern crate libc;
+
+use core::num::Float;
 
 // trunccdfsf2
 fn aeabi_d2f(x: f64) -> f32 {
@@ -37,6 +40,21 @@ fn aeabi_d2ul(x: f64) -> u64 {
 // adddf3
 fn aeabi_dadd(a: f64, b: f64) -> f64 {
     a + b
+}
+
+// eqdf2
+fn aeabi_dcmpeq(a: f64, b: f64) -> bool {
+    a == b
+}
+
+// gtdf2
+fn aeabi_dcmpgt(a: f64, b: f64) -> bool {
+    a > b
+}
+
+// ltdf2
+fn aeabi_dcmplt(a: f64, b: f64) -> bool {
+    a < b
 }
 
 // divdf3
@@ -84,6 +102,21 @@ fn aeabi_fadd(a: f32, b: f32) -> f32 {
     a + b
 }
 
+// eqsf2
+fn aeabi_fcmpeq(a: f32, b: f32) -> bool {
+    a == b
+}
+
+// gtsf2
+fn aeabi_fcmpgt(a: f32, b: f32) -> bool {
+    a > b
+}
+
+// ltsf2
+fn aeabi_fcmplt(a: f32, b: f32) -> bool {
+    a < b
+}
+
 // divsf3
 fn aeabi_fdiv(a: f32, b: f32) -> f32 {
     a / b
@@ -128,6 +161,11 @@ fn aeabi_ldivmod(a: i64, b: i64) -> i64 {
     a / b
 }
 
+// muldi3
+fn aeabi_lmul(a: i64, b: i64) -> i64 {
+    a.wrapping_mul(b)
+}
+
 // floatunsidf
 fn aeabi_ui2d(x: u32) -> f64 {
     x as f64
@@ -169,6 +207,14 @@ fn mulodi4(a: i64, b: i64) -> i64 {
     a * b
 }
 
+fn powidf2(a: f64, b: i32) -> f64 {
+    a.powi(b)
+}
+
+fn powisf2(a: f32, b: i32) -> f32 {
+    a.powi(b)
+}
+
 fn umoddi3(a: u64, b: u64) -> u64 {
     a % b
 }
@@ -181,6 +227,9 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_d2ui(2.);
     aeabi_d2ul(2.);
     aeabi_dadd(2., 3.);
+    aeabi_dcmpeq(2., 3.);
+    aeabi_dcmpgt(2., 3.);
+    aeabi_dcmplt(2., 3.);
     aeabi_ddiv(2., 3.);
     aeabi_dmul(2., 3.);
     aeabi_dsub(2., 3.);
@@ -190,6 +239,9 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_f2ui(2.);
     aeabi_f2ul(2.);
     aeabi_fadd(2., 3.);
+    aeabi_fcmpeq(2., 3.);
+    aeabi_fcmpgt(2., 3.);
+    aeabi_fcmplt(2., 3.);
     aeabi_fdiv(2., 3.);
     aeabi_fmul(2., 3.);
     aeabi_fsub(2., 3.);
@@ -199,6 +251,7 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_l2d(2);
     aeabi_l2f(2);
     aeabi_ldivmod(2, 3);
+    aeabi_lmul(2, 3);
     aeabi_ui2d(2);
     aeabi_ui2f(2);
     aeabi_uidiv(2, 3);
@@ -208,6 +261,8 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_uldivmod(2, 3);
     moddi3(2, 3);
     mulodi4(2, 3);
+    powidf2(2., 3);
+    powisf2(2., 3);
     umoddi3(2, 3);
 
     0
