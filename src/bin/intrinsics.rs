@@ -28,12 +28,12 @@ fn aeabi_d2l(x: f64) -> i64 {
 }
 
 // fixunsdfsi
-fn aeabi_d2ui(x: f64) -> u32 {
+fn aeabi_d2uiz(x: f64) -> u32 {
     x as u32
 }
 
 // fixunsdfdi
-fn aeabi_d2ul(x: f64) -> u64 {
+fn aeabi_d2ulz(x: f64) -> u64 {
     x as u64
 }
 
@@ -78,22 +78,22 @@ fn aeabi_f2d(x: f32) -> f64 {
 }
 
 // fixsfsi
-fn aeabi_f2i(x: f32) -> i32 {
+fn aeabi_f2iz(x: f32) -> i32 {
     x as i32
 }
 
 // fixsfdi
-fn aeabi_f2l(x: f32) -> i64 {
+fn aeabi_f2lz(x: f32) -> i64 {
     x as i64
 }
 
 // fixunssfsi
-fn aeabi_f2ui(x: f32) -> u32 {
+fn aeabi_f2uiz(x: f32) -> u32 {
     x as u32
 }
 
 // fixunssfdi
-fn aeabi_f2ul(x: f32) -> u64 {
+fn aeabi_f2ulz(x: f32) -> u64 {
     x as u64
 }
 
@@ -140,6 +140,10 @@ fn aeabi_i2d(x: i32) -> f64 {
 // floatsisf
 fn aeabi_i2f(x: i32) -> f32 {
     x as f32
+}
+
+fn aeabi_idiv(a: i32, b: i32) -> i32 {
+    a.wrapping_div(b)
 }
 
 fn aeabi_idivmod(a: i32, b: i32) -> i32 {
@@ -224,8 +228,8 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_d2f(2.);
     aeabi_d2i(2.);
     aeabi_d2l(2.);
-    aeabi_d2ui(2.);
-    aeabi_d2ul(2.);
+    aeabi_d2uiz(2.);
+    aeabi_d2ulz(2.);
     aeabi_dadd(2., 3.);
     aeabi_dcmpeq(2., 3.);
     aeabi_dcmpgt(2., 3.);
@@ -234,10 +238,10 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_dmul(2., 3.);
     aeabi_dsub(2., 3.);
     aeabi_f2d(2.);
-    aeabi_f2i(2.);
-    aeabi_f2l(2.);
-    aeabi_f2ui(2.);
-    aeabi_f2ul(2.);
+    aeabi_f2iz(2.);
+    aeabi_f2lz(2.);
+    aeabi_f2uiz(2.);
+    aeabi_f2ulz(2.);
     aeabi_fadd(2., 3.);
     aeabi_fcmpeq(2., 3.);
     aeabi_fcmpgt(2., 3.);
@@ -247,6 +251,7 @@ fn main(_: isize, _: *const *const u8) -> isize {
     aeabi_fsub(2., 3.);
     aeabi_i2d(2);
     aeabi_i2f(2);
+    aeabi_idiv(2, 3);
     aeabi_idivmod(2, 3);
     aeabi_l2d(2);
     aeabi_l2f(2);
