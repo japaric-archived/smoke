@@ -45,40 +45,31 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-musl
 
 install:
-  # curl: `rustc` + Cargo
-  # case: `rust-std`
-  # rustup: `rust-src`
-  # docker: For transparent QEMU user emulation
-  - if [ -z $TRAVIS_TAG ] || [ $TRAVIS_RUST_VERSION = $DEPLOY_VERSION ]; then
-      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $TRAVIS_RUST_VERSION;
-
-      source ~/.cargo/env;
-
-      case $TARGET in
-        x86_64-apple-darwin | x86_64-unknown-linux-gnu | thumbv*-none-eabi*) ;;
-        *) rustup target add $TARGET;;
-      esac;
-
-      rustup component add rust-src;
-
-      test $TRAVIS_OS_NAME = osx ||
-      docker run --privileged --rm -it ubuntu:16.04 sh -c
-      "apt-get update && apt-get install -qq binfmt-support qemu-user-static";
-    fi
+  # `libc`
+  - git clone --depth 1 https://github.com/rust-lang/libc
+  # `rustc` + Cargo
+  - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $TRAVIS_RUST_VERSION
+  - source ~/.cargo/env
+  # `rust-std`
+  - case $TARGET in
+      x86_64-apple-darwin | x86_64-unknown-linux-gnu | thumbv*-none-eabi*) ;;
+      *) rustup target add $TARGET;;
+    esac
+  # `rust-src`
+  - rustup component add rust-src
+  # for transparent QEMU user emulation
+  - test $TRAVIS_OS_NAME = osx ||
+    docker run --privileged --rm -it ubuntu:16.04 sh -c
+    "apt-get update && apt-get install -qq binfmt-support qemu-user-static"
 
 script:
-  # chmod: Travis can't cache files that are not readable by "others"
-  - if [ -z $TRAVIS_TAG ] || [ $TRAVIS_RUST_VERSION = $DEPLOY_VERSION ]; then
-      cargo generate-lockfile;
-
-      if [[ $TRAVIS_OS_NAME = linux ]]; then
-        sh ci/run-docker.sh $TARGET || exit 1;
-      else
-        bash ci/run.sh || exit 1;
-      fi;
-
-      chmod -R a+r $HOME/.cargo;
+  - cargo generate-lockfile
+  - if [[ $TRAVIS_OS_NAME = linux ]]; then
+      sh ci/run-docker.sh $TARGET;
+    else
+      bash ci/run.sh;
     fi
+  - chmod -R a+r $HOME/.cargo
 
 branches:
   only:
