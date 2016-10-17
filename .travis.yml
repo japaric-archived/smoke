@@ -46,7 +46,8 @@ matrix:
 
 install:
   # curl: `rustc` + Cargo
-  # rustup: `rust-src` or `rust-std`
+  # case: `rust-std`
+  # rustup: `rust-src`
   # docker: For transparent QEMU user emulation
   - if [ -z $TRAVIS_TAG ] || [ $TRAVIS_RUST_VERSION = $DEPLOY_VERSION ]; then
       curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $TRAVIS_RUST_VERSION;
@@ -54,10 +55,11 @@ install:
       source ~/.cargo/env;
 
       case $TARGET in
-        x86_64-apple-darwin | x86_64-unknown-linux-gnu) ;;
-        thumbv*-none-eabi*) rustup component add rust-src ;;
+        x86_64-apple-darwin | x86_64-unknown-linux-gnu | thumbv*-none-eabi*) ;;
         *) rustup target add $TARGET;;
       esac;
+
+      rustup component add rust-src;
 
       test $TRAVIS_OS_NAME = osx ||
       docker run --privileged --rm -it ubuntu:16.04 sh -c
