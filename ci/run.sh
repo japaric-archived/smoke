@@ -38,7 +38,7 @@ run_unit_tests() {
 }
 
 run_std_tests() {
-    local linker=CARGO_TARGET_$(echo $TARGET | tr '[a-z]-' | '[A-Z]_')_LINKER
+    local linker=CARGO_TARGET_$(echo $TARGET | tr '[a-z]-' '[A-Z]_')_LINKER
     local crates=(
         alloc
         alloc_system
