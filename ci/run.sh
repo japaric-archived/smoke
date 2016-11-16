@@ -21,14 +21,14 @@ run_apps() {
     try 'hello.debug' "run hello"
     try 'panic.debug' "
 run panic
-[[ \$? == 101 ]] || exit 1
+test \$? = 101
 "
 
     try 'start.release' "run start --release"
     try 'hello.release' "run hello --release"
     try 'panic.release' "
 run panic --release
-[[ \$? == 101 ]] || exit 1
+test \$? = 101
 "
 }
 
