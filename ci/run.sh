@@ -107,7 +107,13 @@ report_failures() {
 main() {
     run_apps
     run_unit_tests
-    run_libc_test
+
+    case $TARGET in
+        # TODO the ARM-musl targets need an arm-musl-gcc toolchain
+        arm*musleabi*) ;;
+        *) run_libc_test
+    esac
+
     run_std_tests
     report_failures
 }
