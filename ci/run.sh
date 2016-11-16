@@ -1,7 +1,5 @@
 set -ex
 
-. $(dirname $0)/env.sh
-
 failures=()
 
 try() {
@@ -34,37 +32,13 @@ run panic --release
 "
 }
 
-run_intrinsics() {
-    try 'intrinsics' "cargo build --target $TARGET --bin intrinsics"
-
-    cp src/bin/intrinsics.rs{,.bk}
-    $SED -i '/compiler_builtins/d' src/bin/intrinsics.rs
-    set +e
-    local stderr=$(cargo rustc --target $TARGET --bin intrinsics -- -Z print-link-args 3>&1 1>&2 2>&3 3>&-)
-    set -e
-
-    echo "$stderr"
-
-    set +x
-    echo 'Intrinsics provided by compiler_builtins'
-    echo "$stderr" | grep undefined | cut -d'`' -f2
-    echo '---'
-    set -x
-
-    mv src/bin/intrinsics.rs{.bk,}
-}
-
 run_unit_tests() {
-    if [[ $QEMU_LD_PREFIX ]]; then
-        export RUST_TEST_THREADS=1
-    fi
-
     try 'cargo_test.debug' "cargo test --target $TARGET"
     try 'cargo_test.release' "cargo test --target $TARGET --release"
 }
 
 run_std_tests() {
-    local linker=CC_${TARGET//-/_}
+    local linker=CARGO_TARGET_$(echo $TARGET | tr '[a-z]-' '[A-Z]_')_LINKER
     local crates=(
         alloc
         alloc_system
@@ -86,7 +60,7 @@ run_std_tests() {
 
     local crate flags lib_rs
     for crate in ${crates[@]}; do
-        flags="--crate-name $crate --target $TARGET --test"
+        flags="--crate-name $crate --target $TARGET --test --out-dir /tmp"
         lib_rs=$(rustc --print sysroot)/lib/rustlib/src/rust/src/lib$crate/lib.rs
 
         # debug
@@ -95,7 +69,7 @@ run_std_tests() {
         else
             rustc $flags $lib_rs
         fi
-        try "$crate.debug" "./$crate"
+        try "$crate.debug" "/tmp/$crate"
 
         # release
         if [[ ${!linker} ]]; then
@@ -103,9 +77,9 @@ run_std_tests() {
         else
             rustc $flags -C opt-level=3 $lib_rs
         fi
-        try "$crate.release" "./$crate"
+        try "$crate.release" "/tmp/$crate"
 
-        rm $crate
+        rm /tmp/$crate
     done
 }
 
@@ -131,33 +105,17 @@ report_failures() {
 }
 
 main() {
-    if [[ $LINUX && ${IN_DOCKER_CONTAINER:-n} == n ]]; then
-        local gid=$(id -g) group=$(id -g -n) uid=$(id -u) user=$(id -u -n)
+    run_apps
+    run_unit_tests
 
-        docker run \
-               --entrypoint bash \
-               --privileged \
-               -e IN_DOCKER_CONTAINER=y \
-               -e TARGET=$TARGET \
-               -e TRAVIS_OS_NAME=$TRAVIS_OS_NAME \
-               -v $(pwd):/mnt \
-               japaric/smoke \
-               -c "
-set -ex
-update-binfmts --import
-groupadd -g $gid $group
-useradd -m -g $gid -u $uid $user
-cd /mnt
-su -c 'bash ci/install.sh && bash ci/script.sh' $user
-"
-    else
-        run_apps
-        run_intrinsics
-        run_unit_tests
-        run_libc_test
-        run_std_tests
-        report_failures
-    fi
+    case $TARGET in
+        # TODO the ARM-musl targets need an arm-musl-gcc toolchain
+        arm*musleabi*) ;;
+        *) run_libc_test
+    esac
+
+    run_std_tests
+    report_failures
 }
 
 main

@@ -1,19 +1,30 @@
 environment:
+  global:
+    RUST_VERSION: nightly
   matrix:
     - TARGET: i586-pc-windows-msvc
-    - TARGET: i686-pc-windows-msvc
     - TARGET: i686-pc-windows-gnu
+    - TARGET: i686-pc-windows-msvc
     - TARGET: x86_64-pc-windows-gnu
     - TARGET: x86_64-pc-windows-msvc
 
 install:
-  - ps: ci/install.ps1
+  - ps: ci\install.ps1
 
 build: false
 
 test_script:
-  - ps: ci/script.ps1
+  - ps: ci\run.ps1
+
+cache:
+  - C:\Users\appveyor\.cargo\registry
+  - target
 
 branches:
   only:
-    - master
+    - auto
+    - try
+
+notifications:
+  - provider: Email
+    on_build_success: false
